@@ -14,6 +14,8 @@ class ProductAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
     list_display = ('name', 'slug', 'is_active', 'id',)
     filter_horizontal = ('category',)
+    search_fields = ('name',)
+    list_filter = ('category', 'is_active',)
 
 
 admin.site.register(Product, ProductAdmin)
