@@ -1,5 +1,7 @@
 from django.contrib import admin
 from djangoql.admin import DjangoQLSearchMixin
+from import_export import resources
+from import_export.admin import ImportExportMixin
 
 from .models import Category, Product, Customer, Order
 from .tuples import ORDER_STATUSES
@@ -13,12 +15,19 @@ class CategoryAdmin(admin.ModelAdmin):
 admin.site.register(Category, CategoryAdmin)
 
 
-class ProductAdmin(DjangoQLSearchMixin, admin.ModelAdmin):
+class ProductResource(resources.ModelResource):
+    class Meta:
+        model = Product
+        fields = ('name', 'slug', 'is_active', 'id',)
+
+
+class ProductAdmin(ImportExportMixin, DjangoQLSearchMixin, admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
     list_display = ('name', 'slug', 'is_active', 'id',)
     filter_horizontal = ('category',)
     search_fields = ('name',)
     list_filter = ('category', 'is_active',)
+    resource_classes = (ProductResource,)
 
 
 admin.site.register(Product, ProductAdmin)
