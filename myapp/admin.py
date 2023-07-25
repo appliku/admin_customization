@@ -68,6 +68,7 @@ class OrderAdmin(admin.ModelAdmin):
     )
     list_filter = ('status', OnlyActiveOrdersFilter,)
     list_display_links = ('id', 'created_dt',)
+    list_select_related = ('customer',)
 
     def link_to_customer(self, obj):
         link = reverse("admin:myapp_customer_change", args=[obj.customer.id])
